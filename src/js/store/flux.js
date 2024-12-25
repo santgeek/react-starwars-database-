@@ -13,12 +13,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 
-			addFavorites: (id, name) => {
-				//setStore({ favorites: [...store.favorites, id] })
+			addFavorites: (id, name, type) => {
 				const store = getStore();
-				const favorites = store.favorites.find(favorite => favorite.id === id)
-					? store.favorites.filter(favorite => favorite.id !== id) // Remove if already favorite  
-					: [...store.favorites, { id, name }]; // Add if not favorite  
+
+				const favoriteExists = store.favorites.find(favorite => favorite.id === id && favorite.type === type);
+				const favorites = favoriteExists
+					? store.favorites.filter(favorite => !(favorite.id === id && favorite.type === type))
+					: [...store.favorites, { id, name, type }];
+
 				setStore({ favorites });
 			},
 
@@ -49,18 +51,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const response = await fetch(baseUrl + `people/${id}`)
 					if (!response.ok) {
-						console.error(response.statusText)
 						return false
 					}
 					const characterData = await response.json()
-					//console.log("Fetched character data:", characterData)
 
 					const uid = characterData.result.uid
 					const currentCharactersInfo = { ...store.charactersInfo }
 					currentCharactersInfo[uid] = characterData.result
 
 					setStore({ charactersInfo: currentCharactersInfo })
-					//console.log("The store is populated by: ", currentCharactersInfo)
 					return true
 				} catch (error) {
 					console.error(error)
@@ -71,12 +70,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getVehicles: async (page = 1, limit = 10) => {
 				const response = await fetch(baseUrl + `/vehicles/?page=${page}&limit=${limit}`)
 				if (!response.ok) {
-					console.error(response.statusText)
 					setStore({ loading: false })
 					return false
 				}
 				const swVehiclesData = await response.json()
-				//console.log("Fetched vehicles:", swVehiclesData)
 				setStore({ vehicles: swVehiclesData.results, loading: false })
 				const actions = getActions()
 				const vehicles = swVehiclesData.results
@@ -90,18 +87,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const response = await fetch(baseUrl + `vehicles/${id}`)
 					if (!response.ok) {
-						console.error(response.statusText)
 						return false
 					}
 					const vehicleData = await response.json()
-					//console.log("Fetched vehicle data:", vehicleData)
 
 					const uid = vehicleData.result.uid
 					const currentVehiclesInfo = { ...store.vehiclesInfo }
 					currentVehiclesInfo[uid] = vehicleData.result
 
 					setStore({ vehiclesInfo: currentVehiclesInfo })
-					//console.log("The store is populated by: ", currentVehiclesInfo)
 					return true
 				} catch (error) {
 					console.error(error)
@@ -112,12 +106,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getPlanets: async (page = 1, limit = 10) => {
 				const response = await fetch(baseUrl + `/planets/?page=${page}&limit=${limit}`)
 				if (!response.ok) {
-					console.error(response.statusText)
 					setStore({ loading: false })
 					return false
 				}
 				const swPlanetsData = await response.json()
-				//console.log("Fetched planets:", swPlanetsData)
 				setStore({ planets: swPlanetsData.results, loading: false })
 				const actions = getActions()
 				const planets = swPlanetsData.results
@@ -131,18 +123,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const response = await fetch(baseUrl + `planets/${id}`)
 					if (!response.ok) {
-						console.error(response.statusText)
 						return false
 					}
 					const planetData = await response.json()
-					//console.log("Fetched planet data:", planetData)
 
 					const uid = planetData.result.uid
 					const currentPlanetsInfo = { ...store.planetsInfo }
 					currentPlanetsInfo[uid] = planetData.result
 
 					setStore({ planetsInfo: currentPlanetsInfo })
-					//console.log("The store is populated by: ", currentPlanetsInfo)
 					return true
 				} catch (error) {
 					console.error(error)

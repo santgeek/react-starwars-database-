@@ -15,9 +15,7 @@ export const Home = () => {
 
 	const getCharacterBodyContent = (id) => {
 		const data = store.charactersInfo[id]
-		//console.log("Data for character ID:", id, data)
 		if (!data) {
-			console.error(`No data found for character ID: ${id}`)
 			return <div className="d-flex justify-content-center mt-4 mb-4"><div className="spinner-border" role="status">
 				<span className="sr-only">Loading...</span></div></div>
 		}
@@ -31,9 +29,7 @@ export const Home = () => {
 
 	const getVehicleBodyContent = (id) => {
 		const data = store.vehiclesInfo[id]
-		//console.log("Data for vehicle ID:", id, data)
 		if (!data) {
-			console.error(`No data found for vehicle ID: ${id}`)
 			return <div className="d-flex justify-content-center mt-4 mb-4"><div className="spinner-border" role="status">
 				<span className="sr-only">Loading...</span></div></div>
 		}
@@ -47,9 +43,7 @@ export const Home = () => {
 
 	const getPlanetBodyContent = (id) => {
 		const data = store.planetsInfo[id]
-		//console.log("Data for planet ID:", id, data)
 		if (!data) {
-			//console.error(`No data found for planet ID: ${id}`)
 			return <div className="d-flex justify-content-center mt-4 mb-4"><div className="spinner-border" role="status">
 				<span className="sr-only">Loading...</span></div></div>
 		}

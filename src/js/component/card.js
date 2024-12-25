@@ -10,11 +10,10 @@ export default function Card({ title, body, id, type }) {
     const { store, actions } = useContext(Context)
 
     function imageError(e) {
-        console.log(e)
         e.target.src = "https://starwars-visualguide.com/assets/img/placeholder.jpg"
     }
 
-    const isFavorite = store.favorites.includes(id, title)
+    const isFavorite = store.favorites.some(favorite => favorite.id === id && favorite.type === type)
 
     return <div className="card mx-2" style={{ width: "15rem", flex: "0 0 auto" }}>
         <img src={`https://starwars-visualguide.com/assets/img/${type}/${id}.jpg`} onError={imageError} className="card-img-top" alt="..." />
@@ -25,8 +24,10 @@ export default function Card({ title, body, id, type }) {
                 <Link to={`/${type}/${id}`} className="btn btn-outline-primary">Learn more!</Link>
                 <button
                     type="button"
-                    onClick={() => actions.addFavorites(id, title)}
-                    class={`btn ${isFavorite ? 'btn-danger' : 'btn-outline-warning'}`}><FontAwesomeIcon icon={faHeart} /></button>
+                    onClick={() => actions.addFavorites(id, title, type)}
+                    className={`btn ${isFavorite ? 'btn-warning' : 'btn-outline-warning'}`}>
+                    <FontAwesomeIcon icon={faHeart} />
+                </button>
             </div>
         </div>
     </div>
